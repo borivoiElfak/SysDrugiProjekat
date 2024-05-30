@@ -18,7 +18,7 @@ namespace ProjekatDotnet
         public static readonly HttpClient HttpClient = new();
 
 
-        public static GeoCodeResponse getCoordinates(string cityName) {
+        public static async Task<GeoCodeResponse> GetCoordinatesAsync(string cityName) { 
 
             try {
                 
@@ -26,11 +26,11 @@ namespace ProjekatDotnet
 
                 url = url.Replace(cityParam, cityName);
 
-                var response = HttpClient.GetAsync(url).Result;
+                var response = await HttpClient.GetAsync(url);
                 if (!response.IsSuccessStatusCode)
                     throw new Exception($"ERROR: {response.StatusCode}");
 
-                var content = response.Content.ReadAsStringAsync().Result;
+                var content = await response.Content.ReadAsStringAsync();
                 var jsonResponse = JArray.Parse(content).First;
 
                 if (jsonResponse == null)

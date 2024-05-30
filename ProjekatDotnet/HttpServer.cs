@@ -32,7 +32,7 @@ namespace ProjekatDotnet
 
         }
 
-        private static void ServeRequest(object? state)
+        private static async void ServeRequest(object? state)
         {
 
             if (state == null)
@@ -64,8 +64,7 @@ namespace ProjekatDotnet
                 if (query == null)
                     throw new Exception("Null query exc");
 
-                GeoCodeResponse geoCode = GeoCodeApiService.getCoordinates(query);
-
+                GeoCodeResponse geoCode = await GeoCodeApiService.GetCoordinatesAsync(query);
 
                 var key = $"{geoCode.lat}:{geoCode.lon}";
                 Console.WriteLine();
@@ -77,7 +76,7 @@ namespace ProjekatDotnet
                 }
                 else
                 {
-                    List<WeatherResponse> response = WeatherApiService.getWeather(geoCode);
+                    List<WeatherResponse> response = await WeatherApiService.GetWeatherAsync(geoCode);
                     Cache.WriteToCache(key, response);
                     print(context, response);
                 }

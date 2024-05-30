@@ -18,7 +18,7 @@ namespace ProjekatDotnet
 
         public static readonly HttpClient HttpClient = new();
 
-        public static List<WeatherResponse> getWeather(GeoCodeResponse geoCode)
+        public static async Task<List<WeatherResponse>> GetWeatherAsync(GeoCodeResponse geoCode)
         {
 
             try
@@ -28,11 +28,11 @@ namespace ProjekatDotnet
                 url = url.Replace(latParam, geoCode.lat);
                 url = url.Replace(lonParam, geoCode.lon);
 
-                var response = HttpClient.GetAsync(url).Result;
+                var response = await HttpClient.GetAsync(url);
                 if (!response.IsSuccessStatusCode)
                     throw new Exception($"ERROR: {response.StatusCode}");
 
-                var content = response.Content.ReadAsStringAsync().Result;
+                var content = await response.Content.ReadAsStringAsync();
                 var jsonResponseList = JObject.Parse(content)["list"];
 
                 List<WeatherResponse> weatherList = new List<WeatherResponse>();
